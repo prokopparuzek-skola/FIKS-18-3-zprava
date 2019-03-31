@@ -16,23 +16,23 @@ typedef struct {
 int makeSteps(edge **graph, buffer_t *queue, int max, int*, int);
 int solveStep(edge **graph, buffer_t *queue, int index, int, int*, int);
 void addEdge(edge *vertex, int to);
-void initGraph(edge *graph, int d);
+void initGraph(edge **graph, int d);
 int solve(edge **graph, buffer_t *queue, int max, int*, int);
 void bts(edge **graph, int n, int maxCount, int*, int);
 int isIn(int centr, int* attacked, int from, int to);
 
 void addEdge(edge *vertex, int to) {
-    vertex[vertex[0]] = to;
     vertex[0]++;
+    vertex[vertex[0]] = to;
 }
 
-void initGraph(edge *graph, int d) {
+void initGraph(edge **graph, int d) {
     int i;
 
-    graph = malloc((d + 1) * sizeof(edge));
-    graph[0] = 0;
+    *graph = malloc((d + 1) * sizeof(edge));
+    (*graph)[0] = 0;
     for (i = 1; i <= d ; i++) {
-        graph[i] = -1;
+        (*graph)[i] = -1;
     }
 }
 
@@ -159,12 +159,12 @@ int main() {
         }
         for (i = 0; i < n; i++) { // načte graf
             scanf("%d", &d);
-            initGraph(graph[i], d);
-            for (j = 0; j < d; j++) {
+            initGraph(&graph[i], d);
+            for (j = 1; j <= d; j++) {
                 scanf("%d", &to);
                 addEdge(graph[i], to);
-                if (j > maxCount) {
-                    maxCount = j;
+                if ((j-1) > maxCount) {
+                    maxCount = (j-1);
                 }
             }
         }
