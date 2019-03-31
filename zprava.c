@@ -122,7 +122,7 @@ int isIn(int centr, int* attacked, int from, int to) {
 
 int solveStep(edge **graph, buffer_t *queue, int index, int max, int *attacked, int k) {
     int i, test = 0;
-    for (i = 0; i <= max; i++) { // projde všechny hrany z daného vrcholu
+    for (i = 1; i <= max; i++) { // projde všechny hrany z daného vrcholu
         if (!isIn(graph[queue->stackAc[index]][i], attacked, 0, k)) { // jsi u cíle, dej vědět
             return 0;
         }
@@ -164,8 +164,8 @@ int main() {
             for (j = 1; j <= d; j++) {
                 scanf("%d", &to);
                 addEdge(graph[i], to);
-                if ((j-1) > maxCount) {
-                    maxCount = (j-1);
+                if (j > maxCount) {
+                    maxCount = j;
                 }
             }
         }
