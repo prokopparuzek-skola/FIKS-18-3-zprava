@@ -57,7 +57,7 @@ void bts(edge **graph, int n, int maxCount, int *attacked, int k) { // provádí
         exit(1);
     }
 
-    for (i = 0;; i++) {
+    for (i = 1;; i++) {
         RESET_PAR;              // inicializuje queue před hledáním
         queue.stackAc[0] = 0;
         queue.indexAc = 0;
@@ -65,11 +65,12 @@ void bts(edge **graph, int n, int maxCount, int *attacked, int k) { // provádí
         queue.parents[0] = 0;
         back = solve(graph, &queue, i, attacked, k); // hledá dokud nedosáhne konce, nebo jí nedojdou volné vrcholy
         if (back == 0) { // jsi u cíle, vypiš cestu
-            printf("%d\n", i); // vypiš maximální počet hlídek
+            printf("%d\n", i-1); // vypiš maximální počet hlídek
             break;
         }
         if (i == maxCount && back == 2) { // nic jsi nenašel, vypiš nesmysly
             printf("-1\n");
+            break;
         }
     }
     free(queue.stackAc);
@@ -122,14 +123,14 @@ int isIn(int centr, int* attacked, int from, int to) {
 int solveStep(edge **graph, buffer_t *queue, int index, int max, int *attacked, int k) {
     int i, test = 0;
     for (i = 0; i <= max; i++) { // projde všechny hrany z daného vrcholu
+        if (!isIn(graph[queue->stackAc[index]][i], attacked, 0, k)) { // jsi u cíle, dej vědět
+            return 0;
+        }
         if (queue->parents[graph[queue->stackAc[index]][i]] == -1) { // Nebyl jsem tu?
             test = 1;
             queue->indexFu++; // zvyš index příštích bodů o 1
             queue->stackFu[queue->indexFu] = graph[queue->stackAc[index]][i]; // ulož tam aktuální bod
             queue->parents[graph[queue->stackAc[index]][i]] = queue->stackAc[queue->indexAc]; // ulož odkud jsi vyšel, nutné pro rekonstrukci cesty
-            if (isIn(graph[queue->stackAc[index]][i], attacked, 0, k)) { // jsi u cíle, dej vědět
-                return 0;
-            }
         }
     }
     return test?1:2; // ne dej vědět zda jsi něco našel(1), nebo ne(2)
