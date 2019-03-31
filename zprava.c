@@ -123,6 +123,7 @@ int isIn(int centr, int* attacked, int from, int to) {
 int solveStep(edge **graph, buffer_t *queue, int index, int max, int *attacked, int k) {
     int i, test = 0;
     for (i = 1; i <= max; i++) { // projde všechny hrany z daného vrcholu
+        if (i > graph[queue->stackAc[index]][0]) continue;
         if (!isIn(graph[queue->stackAc[index]][i], attacked, 0, k)) { // jsi u cíle, dej vědět
             return 0;
         }
